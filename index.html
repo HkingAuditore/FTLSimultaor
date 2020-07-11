@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>FTL</title>
+
+    <!-- 插件 -->
+    <script type="text/javascript" src="PlugIn/JQuery.js"></script>
+    <script type="text/javascript" src="PlugIn/Popper.js"></script>
+    <script type="text/javascript" src="PlugIn/bootstrap/js/bootstrap.bundle.js"></script>
+    <script type="text/javascript" src="PlugIn/bootstrap/js/bootstrap.bundle.min.js"></script>
+    <script type="text/javascript" src="PlugIn/bootstrap/js/bootstrap.js"></script>
+    <script type="text/javascript" src="PlugIn/bootstrap/js/bootstrap.min.js"></script>
+
+    <link rel="stylesheet" href="PlugIn/bootstrap/css/bootstrap.css" />
+    <link rel="stylesheet" href="PlugIn/bootstrap/css/bootstrap-grid.css" />
+    <link rel="stylesheet" href="PlugIn/bootstrap/css/bootstrap-grid.min.css" />
+    <link rel="stylesheet" href="PlugIn/bootstrap/css/bootstrap-reboot.css" />
+    <link rel="stylesheet" href="PlugIn/bootstrap/css/bootstrap-reboot.min.css" />
+    <link rel="stylesheet" href="PlugIn/bootstrap/css/bootstrap.min.css" />
+
+    <!-- 插件 -->
+
+    <script type="text/javascript" src="Scripts/Data/Page.js"></script>
+    <script type="text/javascript" src="Scripts/Data/Block.js"></script>
+    <script type="text/javascript" src="Scripts/Data/Data.js"></script>
+    <script type="text/javascript" src="Scripts/FTL/SSD.js"></script>
+</head>
+<script>
+    let ssd = new SSD(64);
+    let data = new Data(
+        "海客谈瀛洲 烟涛微茫信难求 越人语天姥 云霞明灭或可睹 天姥连天向天横 势拔五岳掩赤城 天台四万八千丈 对此欲倒东南倾 我欲因之梦吴越 一夜飞度镜湖月 湖月照我影 送我至剡溪 谢公宿处今尚在 渌水荡漾清猿啼 脚著谢公屐 身登青云梯 半壁见海日 空中闻天鸡 千岩万转路不定 迷花倚石忽已暝 熊咆龙吟殷岩泉 栗深林兮惊层巅 云青青兮欲雨 水澹澹兮生烟 列缺霹雳 丘峦崩摧 洞天石扉 訇然中开 青冥浩荡不见底 日月照耀金银台 霓为衣兮风为马 云之君兮纷纷而来下 虎鼓瑟兮鸾回车 仙之人兮列如麻 忽魂悸以魄动 恍惊起而长嗟 惟觉时之枕席 失向来之烟霞 世间行乐亦如此 古来万事东流水 别君去兮何时还 且放白鹿青崖间 须行即骑访名山 安能摧眉折腰事权贵 使我不得开心颜",
+        ssd
+    );
+
+    console.log("IN DATA")
+    console.log(data.Read());
+
+
+    console.log("IN SSD")
+    let used = '';
+    ssd.usedBlocks.forEach((element) => {
+        used += element.Read();
+    });
+    console.log(Data.BinaryToStr(used))
+</script>
+
+<body></body>
+
+</html>

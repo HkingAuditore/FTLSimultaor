@@ -50,6 +50,7 @@ class SSD {
     WriteBlock(block) {
         if (this.freeBlocks.length > 0) {
             Block.Clone(block, this.freeBlocks[0]);
+            block.pages = null;
             let blk = this.freeBlocks.shift();
             this.usedBlocks.push(blk);
             return blk;
@@ -94,12 +95,19 @@ class SSD {
     Free(block) {
         let target = jQuery.inArray(block, this.usedBlocks);
         if (target != -1) {
-            this.usedBlocks[target].Clean();
+            // 注释下行表明Free操作不对Block进行擦除
+            // this.usedBlocks[target].Clean();
             this.freeBlocks.push(this.usedBlocks[target]);
             this.usedBlocks.splice(target, 1);
         } else {
             throw new Error("找不到此Block！");
         }
+    }
+
+    OutOfUpdate(content, oldBlock) {
+        let newBlock = this.WriteBlock(new Block(content));
+        this.Free(oldBlock);
+        return newBlock;
     }
 
     /* #region   地址映射*/

@@ -47,7 +47,7 @@ class Data {
             if (i < this.blocks.length) {
                 // 修改内容在原有Blocks范围内
                 if (!this.blocks[i].Compare(tmpContent)) {
-                    Block.Clone(new Block(tmpContent), this.blocks[i]);
+                    this.blocks[i] = this.ssd.OutOfUpdate(tmpContent, this.blocks[i]);
                 }
             } else {
                 try {

@@ -1,20 +1,20 @@
-Date : 2020-07-12 11:23:58
+Date : 2020-07-12 11:36:47
 Directory : f:\FTLSimultaor\FTLSimultaor\Scripts
-Total : 4 files,  199 codes, 32 comments, 29 blanks, all 260 lines
+Total : 4 files,  200 codes, 32 comments, 29 blanks, all 261 lines
 
 Languages
 +------------+------------+------------+------------+------------+------------+
 | language   | files      | code       | comment    | blank      | total      |
 +------------+------------+------------+------------+------------+------------+
-| JavaScript |          4 |        199 |         32 |         29 |        260 |
+| JavaScript |          4 |        200 |         32 |         29 |        261 |
 +------------+------------+------------+------------+------------+------------+
 
 Directories
 +----------------------------------------------------+------------+------------+------------+------------+------------+
 | path                                               | files      | code       | comment    | blank      | total      |
 +----------------------------------------------------+------------+------------+------------+------------+------------+
-| .                                                  |          4 |        199 |         32 |         29 |        260 |
-| Data                                               |          3 |        167 |         27 |         24 |        218 |
+| .                                                  |          4 |        200 |         32 |         29 |        261 |
+| Data                                               |          3 |        168 |         27 |         24 |        219 |
 | FTL                                                |          1 |         32 |          5 |          5 |         42 |
 +----------------------------------------------------+------------+------------+------------+------------+------------+
 
@@ -23,8 +23,8 @@ Files
 | filename                                           | language   | code       | comment    | blank      | total      |
 +----------------------------------------------------+------------+------------+------------+------------+------------+
 | f:\FTLSimultaor\FTLSimultaor\Scripts\Data\Block.js | JavaScript |         60 |         13 |         14 |         87 |
-| f:\FTLSimultaor\FTLSimultaor\Scripts\Data\Data.js  | JavaScript |         94 |         14 |          8 |        116 |
+| f:\FTLSimultaor\FTLSimultaor\Scripts\Data\Data.js  | JavaScript |         95 |         14 |          8 |        117 |
 | f:\FTLSimultaor\FTLSimultaor\Scripts\Data\Page.js  | JavaScript |         13 |          0 |          2 |         15 |
 | f:\FTLSimultaor\FTLSimultaor\Scripts\FTL\SSD.js    | JavaScript |         32 |          5 |          5 |         42 |
-| Total                                              |            |        199 |         32 |         29 |        260 |
+| Total                                              |            |        200 |         32 |         29 |        261 |
 +----------------------------------------------------+------------+------------+------------+------------+------------+

@@ -17,6 +17,7 @@ class Data {
 
         // 向SSD中的块写入数据
         let savedBls = [];
+        ssd.datum.push(this);
         for (let i = 0; i < bls.length; i++) {
             try {
                 savedBls.push(ssd.WriteData(bls[i]));
@@ -55,7 +56,7 @@ class Data {
             } else {
                 try {
                     // 修改内容在原有Blocks范围外
-                    this.blocks.push(this.ssd.WriteData(new Block(tmpContent)));
+                    this.blocks.push(this.ssd.WriteBlock(new Block(tmpContent)));
                 } catch (e) {
                     console.log(e.message);
                     break;

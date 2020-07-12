@@ -81,6 +81,44 @@
         used += element.Read();
     });
     console.log(Data.BinaryToStr(used));
+
+
+
+    console.log("***ADD***");
+    let data1 = new Data(
+        "日月之行 若出其中 星汉灿烂 若出其里",
+        ssd
+    );
+    console.log("IN DATA");
+    console.log("length:" + data1.blocks.length);
+    console.log(data1.Read());
+
+    console.log("IN SSD");
+    console.log("free length:" + ssd.freeBlocks.length);
+    console.log("used length:" + ssd.usedBlocks.length);
+    used = "";
+    ssd.usedBlocks.forEach((element) => {
+        used += element.Read();
+    });
+    console.log(Data.BinaryToStr(used));
+
+    console.log("***EDIT***");
+    data.Edit(
+        "举杯邀明月 对影成三人",
+    );
+    console.log("IN DATA");
+    console.log("length:" + data.blocks.length);
+    console.log(data.Read());
+    console.log("IN SSD");
+    console.log("free length:" + ssd.freeBlocks.length);
+    console.log("used length:" + ssd.usedBlocks.length);
+    used = "";
+    ssd.usedBlocks.forEach((element) => {
+        used += element.Read();
+    });
+    console.log(Data.BinaryToStr(used));
+
+    console.log(ssd);
 </script>
 
 <body></body>

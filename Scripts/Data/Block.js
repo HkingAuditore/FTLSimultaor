@@ -23,7 +23,7 @@ class Block {
         // 将数据写入page
         let pgs = [];
         while (contentStr.length >= Page.PAGE_SIZE) {
-            pgs.push(new Page(contentStr.substring(0, Page.PAGE_SIZE)));
+            pgs.push(new Page(contentStr.substring(0, Page.PAGE_SIZE), 9));
             contentStr = contentStr.substring(Page.PAGE_SIZE);
         }
         this.pages = pgs;
@@ -81,7 +81,9 @@ class Block {
     }
 
     static Clone(origin, target) {
-        target.pages = origin.pages;
+        origin.pages.forEach((element, index) => {
+            Page.Clone(element, target.pages[index]);
+        });
         return target;
     }
 }

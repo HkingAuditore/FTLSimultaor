@@ -17,7 +17,7 @@ class SSD {
     }
 
     //向SSD中的空闲区块写入数据
-    WriteData(block) {
+    WriteBlock(block) {
         if (this.freeBlocks.length > 0) {
             Block.Clone(block, this.freeBlocks[0]);
             let blk = this.freeBlocks.shift();

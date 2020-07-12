@@ -4,8 +4,9 @@ class Data {
     static CHAR_SIZE = 16;
     blocks;
     ssd;
+    name;
 
-    constructor(content, ssd) {
+    constructor(content, name = "untitled", ssd = undefined) {
         let bls = [];
         // 将存储内容二进制化
         let contentStr = Data.StrToBinary(content);
@@ -15,20 +16,15 @@ class Data {
             contentStr = contentStr.substring(Block.BUFFER_SIZE);
         }
 
-        // 向SSD中的块写入数据
-        let savedBls = [];
-        ssd.datum.push(this);
-        for (let i = 0; i < bls.length; i++) {
-            try {
-                savedBls.push(ssd.WriteData(bls[i]));
-            } catch (e) {
-                console.log(e.message);
-                break;
-            }
+        this.blocks = bls;
+        this.name = name;
+
+        if (ssd !== undefined) {
+            this.ssd = ssd;
+            let blks = ssd.WriteData(this);
+            blks = null;
         }
-        bls = null;
-        this.blocks = savedBls;
-        this.ssd = ssd;
+
     }
 
     Read() {
@@ -73,6 +69,33 @@ class Data {
             }
         }
     }
+
+    // 修改数据名
+    EditName(name) {
+        this.name = name;
+    }
+
+    //移动数据到另一个SSD
+    Transfer(ssd) {
+        let originSSD = this.ssd;
+        if (originSSD === undefined) {
+            throw new Error("Transfer方法需要Data已有宿主！")
+        }
+        let originBlocks = ssd.WriteData(this);
+        for (let blk of originBlocks) {
+            originSSD.Free(blk);
+        }
+    }
+
+    //复制数据到另一个SSD
+    Copy(ssd) {
+        return new Data(this.Read(), this.name, ssd);
+    }
+
+    Delete() {
+        this.ssd.DeleteData(this);
+    }
+
 
     // 字符串转二进制
     static StrToBinary(content) {

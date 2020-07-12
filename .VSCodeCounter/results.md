@@ -1,23 +1,23 @@
 # Summary
 
-Date : 2020-07-12 11:36:48
+Date : 2020-07-12 13:42:16
 
 Directory f:\FTLSimultaor\FTLSimultaor\Scripts
 
-Total : 4 files,  200 codes, 32 comments, 29 blanks, all 261 lines
+Total : 4 files,  216 codes, 33 comments, 31 blanks, all 280 lines
 
 [details](details.md)
 
 ## Languages
 | language | files | code | comment | blank | total |
 | :--- | ---: | ---: | ---: | ---: | ---: |
-| JavaScript | 4 | 200 | 32 | 29 | 261 |
+| JavaScript | 4 | 216 | 33 | 31 | 280 |
 
 ## Directories
 | path | files | code | comment | blank | total |
 | :--- | ---: | ---: | ---: | ---: | ---: |
-| . | 4 | 200 | 32 | 29 | 261 |
-| Data | 3 | 168 | 27 | 24 | 219 |
-| FTL | 1 | 32 | 5 | 5 | 42 |
+| . | 4 | 216 | 33 | 31 | 280 |
+| Data | 3 | 179 | 28 | 26 | 233 |
+| FTL | 1 | 37 | 5 | 5 | 47 |
 
 [details](details.md)

@@ -5,9 +5,11 @@ class Block {
 
     //Block存储所用的Page
     pages;
+    num;
 
-    constructor(content) {
+    constructor(content, num = 0) {
         this.FillPages(content);
+        this.num = num;
     }
 
     FillPages(content) {

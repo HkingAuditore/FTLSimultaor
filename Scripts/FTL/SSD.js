@@ -16,6 +16,7 @@ class SSD {
         this.datum = [];
     }
 
+    //向SSD中的空闲区块写入数据
     WriteData(block) {
         if (this.freeBlocks.length > 0) {
             Block.Clone(block, this.freeBlocks[0]);
@@ -24,6 +25,18 @@ class SSD {
             return blk;
         } else {
             throw new Error("没有可用区块！");
+        }
+    }
+
+    // 释放区块
+    Free(block) {
+        let target = jQuery.inArray(block, this.usedBlocks);
+        if (target != -1) {
+            this.usedBlocks[target].Clean();
+            this.freeBlocks.push(this.usedBlocks[target]);
+            this.usedBlocks.splice(target, 1);
+        } else {
+            throw new Error("找不到此Block！");
         }
     }
 }

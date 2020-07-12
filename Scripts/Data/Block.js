@@ -23,7 +23,7 @@ class Block {
         // 将数据写入page
         let pgs = [];
         while (contentStr.length >= Page.PAGE_SIZE) {
-            pgs.push(new Page(contentStr.substring(0, Page.PAGE_SIZE), 9));
+            pgs.push(new Page(contentStr.substring(0, Page.PAGE_SIZE)));
             contentStr = contentStr.substring(Page.PAGE_SIZE);
         }
         this.pages = pgs;

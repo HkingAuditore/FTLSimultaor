@@ -10,8 +10,12 @@ class SSD {
     constructor(count) {
         this.freeBlocks = new Array(count);
         this.usedBlocks = [];
+        let pgIndex = 0;
         for (let i = 0; i < this.freeBlocks.length; i++) {
             this.freeBlocks[i] = new Block("");
+            this.freeBlocks[i].pages.forEach(element => {
+                element.num = 'S' + pgIndex++;
+            });
         }
         this.datum = [];
     }

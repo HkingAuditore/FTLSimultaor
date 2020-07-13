@@ -165,8 +165,13 @@
     }
 
     function ReadData() {
-        let data = dataList.get(String($("#DataReadName").val()));
-        AddConsole("查看数据", "[" + data.name + "]:{" + data.ReadIncludeLog() + "}");
+        try {
+            let data = dataList.get(String($("#DataReadName").val()));
+            AddConsole("查看数据", "[" + data.name + "]:{" + data.ReadIncludeLog() + "}");
+
+        } catch {
+            ShowAlert("找不到数据！");
+        }
     }
 
     function EditData() {

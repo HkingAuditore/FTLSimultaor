@@ -48,6 +48,7 @@
     var showBloomFilter = false;
 
     function Allocate() {
+        $("#ConsoleText").text(" ");
         thisSSD = new SSD(Number($("#SsdSize").val()), DefaultSSDName(), Number($("#DataLogSize").val()));
         pagesDraw = new Map();
         blocksDraw = new Map();
@@ -58,6 +59,7 @@
         console.log(thisSSD);
 
         ShowSSD(thisSSD);
+
 
     }
 

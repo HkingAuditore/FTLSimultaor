@@ -1,10 +1,10 @@
 # Details
 
-Date : 2020-07-13 21:47:09
+Date : 2020-07-13 23:09:18
 
 Directory f:\FTLSimultaor\FTLSimultaor
 
-Total : 23 files,  28769 codes, 3725 comments, 5781 blanks, all 38275 lines
+Total : 23 files,  28831 codes, 3728 comments, 5804 blanks, all 38363 lines
 
 [summary](results.md)
 
@@ -32,7 +32,7 @@ Total : 23 files,  28769 codes, 3725 comments, 5781 blanks, all 38275 lines
 | [Scripts/Data/Block.js](/Scripts/Data/Block.js) | JavaScript | 126 | 20 | 24 | 170 |
 | [Scripts/Data/Data.js](/Scripts/Data/Data.js) | JavaScript | 182 | 30 | 23 | 235 |
 | [Scripts/Data/Page.js](/Scripts/Data/Page.js) | JavaScript | 22 | 2 | 5 | 29 |
-| [Scripts/FTL/SSD.js](/Scripts/FTL/SSD.js) | JavaScript | 227 | 44 | 42 | 313 |
-| [index.html](/index.html) | HTML | 228 | 2 | 55 | 285 |
+| [Scripts/FTL/SSD.js](/Scripts/FTL/SSD.js) | JavaScript | 240 | 47 | 50 | 337 |
+| [index.html](/index.html) | HTML | 277 | 2 | 70 | 349 |
 
 [summary](results.md)

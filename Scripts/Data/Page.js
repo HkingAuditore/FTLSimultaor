@@ -15,6 +15,12 @@ class Page {
         this.num = num;
     }
 
+    // 写入
+    Write(content) {
+        this.content = content;
+    }
+
+
     // Page级别的数据复制
     static Clone(origin, target) {
         target.content = origin.content;

@@ -6,6 +6,7 @@ class Block {
     //Block存储所用的Page
     pages;
     num;
+    ssd;
 
     constructor(content, num = 0) {
         this.FillPages(content);
@@ -33,12 +34,73 @@ class Block {
 
     // 修改Block内容
     Edit(content) {
-        FillPages(content);
+        this.FillPages(content);
     }
 
     // 比较内容
     Compare(content) {
         return content === this.Read();
+    }
+
+    //逐Page比较
+    static CompareInPages(content, pages) {
+        let contentStr = String(content);
+        let difference = [];
+        // console.log("COUNT   :" + Block.BUFFER_SIZE / Page.PAGE_SIZE);
+
+        for (let i = 0; i < Block.BUFFER_SIZE / Page.PAGE_SIZE; i++) {
+            // console.log(
+            //     "EDIT    :" +
+            //     Data.BinaryToStr(
+            //         contentStr.substring(
+            //             i * Page.PAGE_SIZE,
+            //             i * Page.PAGE_SIZE + Page.PAGE_SIZE
+            //         )
+            //     ) +
+            //     "ORI  [" +
+            //     i +
+            //     "]:" +
+            //     Data.BinaryToStr(this.pages[i].content) +
+            //     "RESULT:" + (contentStr.substring(
+            //         i * Page.PAGE_SIZE,
+            //         i * Page.PAGE_SIZE + Page.PAGE_SIZE
+            //     ) !== this.pages[i].content)
+            // );
+
+            if (
+                contentStr.substring(
+                    i * Page.PAGE_SIZE,
+                    i * Page.PAGE_SIZE + Page.PAGE_SIZE
+                ) != pages[i].content
+            ) {
+                difference.push(i);
+            }
+        }
+        return difference;
+    }
+
+    // 寻找Block已经存入DataLog的修改
+    FindExistedEdit() {
+        let existed = new Map();
+        for (let page of this.pages) {
+            let result = this.ssd.DataLogFind(page.num);
+            if (result !== undefined) {
+                existed.set(page.num, result);
+            }
+        }
+        return existed;
+    }
+
+    ReadBlockPagesWithLog() {
+        let edit = this.FindExistedEdit();
+        let pages = this.pages;
+        for (let i = 0; i < pages.length; i++) {
+            if (edit.get(pages[i].num) !== undefined) {
+                pages[i] = edit.get(pages[i].num);
+            }
+        }
+
+        return pages;
     }
 
     // 清空块
@@ -82,6 +144,7 @@ class Block {
         return tmpContent;
     }
 
+    // 区块数据复制
     static Clone(origin, target) {
         origin.pages.forEach((element, index) => {
             Page.Clone(element, target.pages[index]);

@@ -37,8 +37,13 @@
     console.log(ssd);
     console.log(data);
 
-    data.Edit("日月之行，若出其中。树木丛生，百草丰茂。");
+    data.EditHybrid("日月之行，若出于其中。星汉灿烂，若出于其里。");
     console.log(data.Read());
+    console.log(data.ReadIncludeLog());
+
+    data.EditHybrid("日月之行，若出其中。星汉灿烂，若出其里。日月之行，若出其中。星汉灿烂，若出其里。日月之行，若出其中。星汉灿烂，若出其里。");
+    console.log(data.Read());
+    console.log(data.ReadIncludeLog());
 
 
     // console.log(ssd);

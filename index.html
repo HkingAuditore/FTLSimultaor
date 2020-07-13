@@ -127,6 +127,7 @@
     function DeleteData() {
         try {
             let name = $("#DataDeleteName").val();
+            AddConsole("删除数据：[" + name + "]！");
             thisSSD.DeleteData(dataList.get(name));
             dataList.delete(name);
             ShowSSD(thisSSD);
@@ -194,7 +195,7 @@
             AddConsole("[" + data.name + "] 已修改为 {" + data.ReadIncludeLog() + "}");
 
         } catch (e) {
-            ShowAlert(e.message);
+            ShowAlert("写入失败！请检查输入及剩余空间大小。");
         }
     }
 

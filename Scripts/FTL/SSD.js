@@ -60,7 +60,7 @@ class SSD {
         }
         this.datum = [];
         this.name = name;
-        this.coldHotIndicator = new Array(count / 4).fill(0);
+        this.coldHotIndicator = new Array(count / 2).fill(0);
 
         //建表
         this.blocksTable = new Map();
@@ -275,39 +275,63 @@ class SSD {
     /* #region  布隆滤波器 */
 
     BloomHashA(num) {
-        let arr = String(num).padStart(SSD.NUM_SIZE, "0").split('');
-        let result = 0;
-        arr.forEach((element) => {
-            result += Math.floor((Number(element) * Number(element) * Number(element)) * 3.17159);
-        });
-        return result % this.coldHotIndicator.length;
+        return Math.floor(num / Math.floor(this.blocksTable.size / this.coldHotIndicator.length));
     }
+
+
+    // 平铺映射
     BloomHashB(num) {
         return num % this.coldHotIndicator.length;
     }
 
+    //平方和
     BloomHashC(num) {
         let arr = String(num).padStart(SSD.NUM_SIZE, "0").split('');
-        arr = arr.reverse();
         let result = 0;
         for (let i = 0; i < arr.length; i++) {
             result += Number(arr[i]) * Number(arr[i]);
         }
-        return Math.floor(result * 3.14) % this.coldHotIndicator.length;
+        return Math.floor(result) % this.coldHotIndicator.length;
+    }
+
+    //i次方和
+    BloomHashD(num) {
+        let arr = String(num).padStart(SSD.NUM_SIZE, "0").split('');
+        arr = arr.reverse();
+        let result = 0;
+        for (let i = 0; i < arr.length; i++) {
+            result += Number(arr[i]) ** i;
+        }
+        return Math.floor(result) % this.coldHotIndicator.length;
     }
 
     BloomFilterGetter(num) {
+        console.log(this.BloomHashA(num));
+        console.log(this.BloomHashB(num));
+        console.log(this.BloomHashC(num));
+        console.log(this.BloomHashD(num));
+
         return (
             this.coldHotIndicator[this.BloomHashA(num)] +
             this.coldHotIndicator[this.BloomHashB(num)] +
-            this.coldHotIndicator[this.BloomHashC(num)]
+            this.coldHotIndicator[this.BloomHashC(num)] +
+            this.coldHotIndicator[this.BloomHashD(num)]
         );
     }
 
     BloomFilterSetter(num) {
             this.coldHotIndicator[this.BloomHashA(num)]++;
+            console.log(this.coldHotIndicator[this.BloomHashA(num)]);
+
             this.coldHotIndicator[this.BloomHashB(num)]++;
+            console.log(this.coldHotIndicator[this.BloomHashB(num)]);
+
             this.coldHotIndicator[this.BloomHashC(num)]++;
+            console.log(this.coldHotIndicator[this.BloomHashC(num)]);
+
+            this.coldHotIndicator[this.BloomHashD(num)]++;
+            console.log(this.coldHotIndicator[this.BloomHashD(num)]);
+
         }
         /* #endregion */
 }

@@ -1,30 +1,60 @@
-Date : 2020-07-13 16:48:40
-Directory : f:\FTLSimultaor\FTLSimultaor\Scripts
-Total : 4 files,  549 codes, 94 comments, 93 blanks, all 736 lines
+Date : 2020-07-13 21:47:09
+Directory : f:\FTLSimultaor\FTLSimultaor
+Total : 23 files,  28769 codes, 3725 comments, 5781 blanks, all 38275 lines
 
 Languages
 +------------+------------+------------+------------+------------+------------+
 | language   | files      | code       | comment    | blank      | total      |
 +------------+------------+------------+------------+------------+------------+
-| JavaScript |          4 |        549 |         94 |         93 |        736 |
+| JavaScript |         10 |     15,497 |      3,681 |      4,249 |     23,427 |
+| CSS        |          6 |     13,014 |         41 |      1,474 |     14,529 |
+| HTML       |          1 |        228 |          2 |         55 |        285 |
+| XML        |          4 |         28 |          0 |          0 |         28 |
+| Markdown   |          1 |          1 |          0 |          2 |          3 |
+| Properties |          1 |          1 |          1 |          1 |          3 |
 +------------+------------+------------+------------+------------+------------+
 
 Directories
-+----------------------------------------------------+------------+------------+------------+------------+------------+
-| path                                               | files      | code       | comment    | blank      | total      |
-+----------------------------------------------------+------------+------------+------------+------------+------------+
-| .                                                  |          4 |        549 |         94 |         93 |        736 |
-| Data                                               |          3 |        322 |         50 |         51 |        423 |
-| FTL                                                |          1 |        227 |         44 |         42 |        313 |
-+----------------------------------------------------+------------+------------+------------+------------+------------+
++----------------------------------------------------------------------------+------------+------------+------------+------------+------------+
+| path                                                                       | files      | code       | comment    | blank      | total      |
++----------------------------------------------------------------------------+------------+------------+------------+------------+------------+
+| .                                                                          |         23 |     28,769 |      3,725 |      5,781 |     38,275 |
+| .idea                                                                      |          4 |         28 |          0 |          0 |         28 |
+| PlugIn                                                                     |         12 |     27,954 |      3,626 |      5,629 |     37,209 |
+| PlugIn\bootstrap                                                           |         10 |     20,765 |      1,731 |      3,502 |     25,998 |
+| PlugIn\bootstrap\css                                                       |          6 |     13,014 |         41 |      1,474 |     14,529 |
+| PlugIn\bootstrap\js                                                        |          4 |      7,751 |      1,690 |      2,028 |     11,469 |
+| Scripts                                                                    |          4 |        557 |         96 |         94 |        747 |
+| Scripts\Data                                                               |          3 |        330 |         52 |         52 |        434 |
+| Scripts\FTL                                                                |          1 |        227 |         44 |         42 |        313 |
++----------------------------------------------------------------------------+------------+------------+------------+------------+------------+
 
 Files
-+----------------------------------------------------+------------+------------+------------+------------+------------+
-| filename                                           | language   | code       | comment    | blank      | total      |
-+----------------------------------------------------+------------+------------+------------+------------+------------+
-| f:\FTLSimultaor\FTLSimultaor\Scripts\Data\Block.js | JavaScript |        126 |         20 |         24 |        170 |
-| f:\FTLSimultaor\FTLSimultaor\Scripts\Data\Data.js  | JavaScript |        174 |         28 |         22 |        224 |
-| f:\FTLSimultaor\FTLSimultaor\Scripts\Data\Page.js  | JavaScript |         22 |          2 |          5 |         29 |
-| f:\FTLSimultaor\FTLSimultaor\Scripts\FTL\SSD.js    | JavaScript |        227 |         44 |         42 |        313 |
-| Total                                              |            |        549 |         94 |         93 |        736 |
-+----------------------------------------------------+------------+------------+------------+------------+------------+
++----------------------------------------------------------------------------+------------+------------+------------+------------+------------+
+| filename                                                                   | language   | code       | comment    | blank      | total      |
++----------------------------------------------------------------------------+------------+------------+------------+------------+------------+
+| f:\FTLSimultaor\FTLSimultaor\.gitattributes                                | Properties |          1 |          1 |          1 |          3 |
+| f:\FTLSimultaor\FTLSimultaor\.idea\FTLSimultaor.iml                        | XML        |          8 |          0 |          0 |          8 |
+| f:\FTLSimultaor\FTLSimultaor\.idea\misc.xml                                | XML        |          6 |          0 |          0 |          6 |
+| f:\FTLSimultaor\FTLSimultaor\.idea\modules.xml                             | XML        |          8 |          0 |          0 |          8 |
+| f:\FTLSimultaor\FTLSimultaor\.idea\vcs.xml                                 | XML        |          6 |          0 |          0 |          6 |
+| f:\FTLSimultaor\FTLSimultaor\PlugIn\JQuery.js                              | JavaScript |      6,906 |      1,890 |      2,076 |     10,872 |
+| f:\FTLSimultaor\FTLSimultaor\PlugIn\Popper.js                              | JavaScript |        283 |          5 |         51 |        339 |
+| f:\FTLSimultaor\FTLSimultaor\PlugIn\bootstrap\css\bootstrap-grid.css       | CSS        |      3,686 |          7 |        211 |      3,904 |
+| f:\FTLSimultaor\FTLSimultaor\PlugIn\bootstrap\css\bootstrap-grid.min.css   | CSS        |          1 |          6 |          0 |          7 |
+| f:\FTLSimultaor\FTLSimultaor\PlugIn\bootstrap\css\bootstrap-reboot.css     | CSS        |        262 |          8 |         55 |        325 |
+| f:\FTLSimultaor\FTLSimultaor\PlugIn\bootstrap\css\bootstrap-reboot.min.css | CSS        |          1 |          7 |          0 |          8 |
+| f:\FTLSimultaor\FTLSimultaor\PlugIn\bootstrap\css\bootstrap.css            | CSS        |      9,063 |          7 |      1,208 |     10,278 |
+| f:\FTLSimultaor\FTLSimultaor\PlugIn\bootstrap\css\bootstrap.min.css        | CSS        |          1 |          6 |          0 |          7 |
+| f:\FTLSimultaor\FTLSimultaor\PlugIn\bootstrap\js\bootstrap.bundle.js       | JavaScript |      4,494 |      1,364 |      1,176 |      7,034 |
+| f:\FTLSimultaor\FTLSimultaor\PlugIn\bootstrap\js\bootstrap.bundle.min.js   | JavaScript |          1 |          6 |          0 |          7 |
+| f:\FTLSimultaor\FTLSimultaor\PlugIn\bootstrap\js\bootstrap.js              | JavaScript |      3,255 |        314 |        852 |      4,421 |
+| f:\FTLSimultaor\FTLSimultaor\PlugIn\bootstrap\js\bootstrap.min.js          | JavaScript |          1 |          6 |          0 |          7 |
+| f:\FTLSimultaor\FTLSimultaor\README.md                                     | Markdown   |          1 |          0 |          2 |          3 |
+| f:\FTLSimultaor\FTLSimultaor\Scripts\Data\Block.js                         | JavaScript |        126 |         20 |         24 |        170 |
+| f:\FTLSimultaor\FTLSimultaor\Scripts\Data\Data.js                          | JavaScript |        182 |         30 |         23 |        235 |
+| f:\FTLSimultaor\FTLSimultaor\Scripts\Data\Page.js                          | JavaScript |         22 |          2 |          5 |         29 |
+| f:\FTLSimultaor\FTLSimultaor\Scripts\FTL\SSD.js                            | JavaScript |        227 |         44 |         42 |        313 |
+| f:\FTLSimultaor\FTLSimultaor\index.html                                    | HTML       |        228 |          2 |         55 |        285 |
+| Total                                                                      |            |     28,769 |      3,725 |      5,781 |     38,275 |
++----------------------------------------------------------------------------+------------+------------+------------+------------+------------+

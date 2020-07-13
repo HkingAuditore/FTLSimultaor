@@ -45,11 +45,15 @@
     var blocksDraw = new Map();
     var dataList = new Map();
 
+    var showBloomFilter = false;
+
     function Allocate() {
         thisSSD = new SSD(Number($("#SsdSize").val()), DefaultSSDName(), Number($("#DataLogSize").val()));
         pagesDraw = new Map();
         blocksDraw = new Map();
         dataList = new Map();
+        showBloomFilter = false;
+
         console.log("SSD已创建！");
         console.log(thisSSD);
 
@@ -93,6 +97,7 @@
 
 
         });
+        ShowBloom();
     }
 
     function ShowPageContent(num) {
@@ -118,11 +123,30 @@
 
     function ShowPageData(num) {
         if (num === undefined) num = "0000";
-        AddConsole("[" + num + "]的二进制数据为：" + thisSSD.FindPage(num).content,
-            "[" + num + "]的解码数据为：" + Data.BinaryToStr(thisSSD.FindPage(num).content));
+        if (thisSSD.dataLog.some(element =>
+                element.pages.some(e =>
+                    e.num == num
+                )
+            )) {
+            console.log(num % 2);
+            if (num % 2 == 1) {
+                AddConsole("[" + num + "]的二进制数据为：" + thisSSD.FindPage(num).content,
+                    "[" + num + "]的解码数据为：" + Data.BinaryToStr(thisSSD.FindPage(num).content));
+
+            } else {
+                AddConsole("[" + num + "]的二进制数据为：" + thisSSD.FindPage(num).content,
+                    "[" + num + "]指向的page是：" + SSD.BinaryToPageId(thisSSD.FindPage(num).content));
+
+            }
+        } else {
+            AddConsole("[" + num + "]的二进制数据为：" + thisSSD.FindPage(num).content,
+                "[" + num + "]的解码数据为：" + Data.BinaryToStr(thisSSD.FindPage(num).content));
+
+        }
     }
 
     function ShowBlockData(num) {
+        if (num === undefined) num = "0000";
         AddConsole("[" + num + "]的二进制数据为：" + thisSSD.FindBlock(num).Read(),
             "[" + num + "]的解码数据为：" + Data.BinaryToStr(thisSSD.FindBlock(num).Read()));
     }
@@ -157,6 +181,34 @@
     function ShowAlert(str) {
         $('.modal-body').html(str);
         $('#SSDAlert').modal('show');
+    }
+
+    function SwitchBloom() {
+        showBloomFilter = !showBloomFilter;
+        ShowBloom();
+    }
+
+    function ShowBloom() {
+        if (showBloomFilter) {
+            let pgs = $(".page").toArray();
+            // console.log(pgs);
+            for (let pg of pgs) {
+                let num = pg.attributes.getNamedItem("pagenum").value;
+                console.log(Math.floor(num / 8));
+                pg.textContent = thisSSD.BloomFilterGetter(Math.floor(num / 8));
+            }
+        } else {
+            let pgs = $(".page");
+            for (let pg of pgs) {
+                pg.textContent = pg.attributes.getNamedItem("pagenum").value;
+            }
+
+        }
+    }
+
+    function Merge() {
+        thisSSD.FullMerge();
+        ShowSSD(thisSSD);
     }
 </script>
 
@@ -230,6 +282,16 @@
                         <textarea class="form-control" aria-label="With textarea" style="height: 300px;" id="ConsoleText"></textarea>
                     </div>
                 </div>
+
+                <div class="row">
+
+                    <button type="button" class="btn btn-primary" style="margin-top: 2%;" onclick="SwitchBloom()">查看数据热度</button>
+
+                    <button type="button" class="btn btn-primary" style="margin-top: 2%;margin-left: 2%;" onclick="Merge()">合并DataLog</button>
+
+                </div>
+
+
             </div>
 
 

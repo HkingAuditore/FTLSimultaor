@@ -37,6 +37,9 @@ class SSD {
     //缓冲区当前使用Block标记
     dataLogCur;
 
+    //冷热数据滤波器指示数组
+    coldHotIndicator;
+
     // 编号长度
     static NUM_SIZE = 4;
 
@@ -57,6 +60,7 @@ class SSD {
         }
         this.datum = [];
         this.name = name;
+        this.coldHotIndicator = new Array(count / 4).fill(0);
 
         //建表
         this.blocksTable = new Map();
@@ -91,6 +95,7 @@ class SSD {
             block.pages = null;
             let blk = this.freeBlocks.shift();
             this.usedBlocks.push(blk);
+            this.BloomFilterSetter(blk.num);
             return blk;
         } else {
             throw new Error("没有可用区块！");
@@ -137,6 +142,8 @@ class SSD {
             this.usedBlocks[target].data = undefined;
             this.freeBlocks.push(this.usedBlocks[target]);
             this.usedBlocks.splice(target, 1);
+            this.BloomFilterSetter(target.num);
+
         } else {
             throw new Error("找不到此Block！");
         }
@@ -207,55 +214,47 @@ class SSD {
 
     /* #region  垃圾回收 */
     FreeLog() {
-        this.dataLog.forEach(element => {
-            element.pages.forEach(page => {
+        this.dataLog.forEach((element) => {
+            element.pages.forEach((page) => {
                 page.Write("".padStart(Page.PAGE_SIZE, "0"));
-            })
+            });
         });
         this.dataLogCur = 0;
     }
 
     // 完全合并
     FullMerge() {
-        let usedBlks = [];
-        // 创建usedblock的副本，不能使用引用！
-        this.usedBlocks.forEach(element => {
-            usedBlks.push(element);
-        })
+            let usedBlks = [];
+            // 创建usedblock的副本，不能使用引用！
+            this.usedBlocks.forEach((element) => {
+                usedBlks.push(element);
+            });
 
-        //逐usedblock操作
-        for (let i = 0; i < usedBlks.length; i++) {
-            let existed = usedBlks[i].FindExistedEdit();
-            // 如果这个block有对应的修改log，就新申请一个block进行合并操作
-            if (existed.size > 0) {
-                let tmp = new Block("");
-                let pages = usedBlks[i].ReadBlockPagesWithLog();
+            //逐usedblock操作
+            for (let i = 0; i < usedBlks.length; i++) {
+                let existed = usedBlks[i].FindExistedEdit();
+                // 如果这个block有对应的修改log，就新申请一个block进行合并操作
+                if (existed.size > 0) {
+                    let tmp = new Block("");
+                    let pages = usedBlks[i].ReadBlockPagesWithLog();
 
-                // 数据转移
-                for (let page in pages) {
-                    Page.Clone(pages[page], tmp.pages[page]);
+                    // 数据转移
+                    for (let page in pages) {
+                        Page.Clone(pages[page], tmp.pages[page]);
+                    }
+                    let blk = this.WriteBlock(tmp);
+                    usedBlks[i].data.ChangeBlock(usedBlks[i], blk);
+
+                    // 旧block释放
+                    this.Free(usedBlks[i]);
                 }
-                let blk = this.WriteBlock(tmp);
-                usedBlks[i].data.ChangeBlock(usedBlks[i], blk);
-
-                // 旧block释放
-                this.Free(usedBlks[i]);
-
             }
+            this.FreeLog();
         }
-        this.FreeLog();
-    }
-
-    // 部分合并
-    PartialMerge() {
-
-    }
-
-
-
-    /* #endregion */
+        /* #endregion */
 
     /* #region   地址映射*/
+
     // 根据data名称查找data
     FindData(name) {
         return this.datum.find((d) => d.name == name);
@@ -272,4 +271,43 @@ class SSD {
     }
 
     /* #endregion */
+
+    /* #region  布隆滤波器 */
+
+    BloomHashA(num) {
+        let arr = String(num).padStart(SSD.NUM_SIZE, "0").split('');
+        let result = 0;
+        arr.forEach((element) => {
+            result += Math.floor((Number(element) * Number(element) * Number(element)) * 3.17159);
+        });
+        return result % this.coldHotIndicator.length;
+    }
+    BloomHashB(num) {
+        return num % this.coldHotIndicator.length;
+    }
+
+    BloomHashC(num) {
+        let arr = String(num).padStart(SSD.NUM_SIZE, "0").split('');
+        arr = arr.reverse();
+        let result = 0;
+        for (let i = 0; i < arr.length; i++) {
+            result += Number(arr[i]) * Number(arr[i]);
+        }
+        return Math.floor(result * 3.14) % this.coldHotIndicator.length;
+    }
+
+    BloomFilterGetter(num) {
+        return (
+            this.coldHotIndicator[this.BloomHashA(num)] +
+            this.coldHotIndicator[this.BloomHashB(num)] +
+            this.coldHotIndicator[this.BloomHashC(num)]
+        );
+    }
+
+    BloomFilterSetter(num) {
+            this.coldHotIndicator[this.BloomHashA(num)]++;
+            this.coldHotIndicator[this.BloomHashB(num)]++;
+            this.coldHotIndicator[this.BloomHashC(num)]++;
+        }
+        /* #endregion */
 }

@@ -30,21 +30,21 @@
 </head>
 <script>
     var ssd = new SSD(256);
-    var data = new Data("日月之行，若出其中。星汉灿烂，若出其里。", "观沧海");
+    var data = new Data("日月之行，若出其中。", "观沧海");
     ssd.WriteData(data);
     console.log(data.Read());
     console.log(data.ReadIncludeLog());
 
 
-    data.EditHybrid("对酒当歌，人生几何！譬如朝露，去日苦多。");
-    console.log("修改为：对酒当歌，人生几何！譬如朝露，去日苦多。");
+    data.Edit("对酒当歌，人生几何！");
+    console.log("修改为：对酒当歌，人生几何！");
     console.log(data.Read());
     console.log(data.ReadIncludeLog());
     // ssd.FullMerge();
     console.log("");
 
 
-    data.EditHybrid("呦呦鹿鸣，食野之苹。");
+    data.Edit("呦呦鹿鸣，食野之苹。");
     console.log("修改为：呦呦鹿鸣，食野之苹。");
     console.log(data.Read());
     console.log(data.ReadIncludeLog());
@@ -55,15 +55,55 @@
     // console.log(data.ReadIncludeLog());
     console.log("");
 
-    data.EditHybrid("月明星稀，乌鹊南飞。绕树三匝，何枝可依？山不厌高，海不厌深。周公吐哺，天下归心。");
-    console.log("修改为：月明星稀，乌鹊南飞。绕树三匝，何枝可依？山不厌高，海不厌深。周公吐哺，天下归心。");
-    console.log(data.Read());
-    console.log(data.ReadIncludeLog());
-    ssd.FullMerge();
+    data.Edit("月明星稀，乌鹊南飞。绕树三匝，何枝可依？山不厌高，海不厌深。周公吐哺，天下归心。");
+    // console.log("修改为：月明星稀，乌鹊南飞。绕树三匝，何枝可依？山不厌高，海不厌深。周公吐哺，天下归心。");
+    // console.log(data.Read());
+    // console.log(data.ReadIncludeLog());
+    // ssd.FullMerge();
 
-    console.log("完全合并：");
-    console.log(data.Read());
-    console.log(data.ReadIncludeLog());
+    var data1 = new Data("日月之行，若出其中。星汉灿烂，若出其里。", "观沧海");
+    ssd.WriteData(data1);
+
+    console.log("展示数据热度：");
+    data.blocks.forEach(x => {
+        console.log("BLOOM WRITE: " + ssd.BloomHashA(x.num) + "," + ssd.BloomHashB(x.num) + "," + ssd.BloomHashC(x.num))
+        console.log(x.num + " : " + ssd.BloomFilterGetter(x.num));
+    })
+    console.log("展示数据热度：");
+    data1.blocks.forEach(x => {
+            console.log("BLOOM WRITE: " + ssd.BloomHashA(x.num) + "," + ssd.BloomHashB(x.num) + "," + ssd.BloomHashC(x.num))
+            console.log(x.num + " : " + ssd.BloomFilterGetter(x.num));
+        })
+        // console.log(data.ReadIncludeLog());
+
+
+    console.log("展示数据热度：");
+    ssd.blocksTable.forEach(function(value, key) {
+        if (value.Read() !== undefined) {
+            console.log(value.Read());
+            console.log(key + " : " + ssd.BloomFilterGetter(key));
+        } else {
+            console.log("EMPTY");
+
+            console.log(key + " : " + ssd.BloomFilterGetter(key));
+
+        }
+
+    })
+
+    // var indicator = new Array(ssd.coldHotIndicator.length).fill(0);
+    // ssd.blocksTable.forEach((x) => {
+    //     indicator[ssd.BloomHashA(x.num)]++;
+    //     indicator[ssd.BloomHashB(x.num)]++;
+    //     indicator[ssd.BloomHashC(x.num)]++;
+    // })
+
+    // console.log("分布");
+    // for (let i in indicator) {
+    //     console.log("[" + i + "]" + indicator[i]);
+
+    // }
+
 
 
 

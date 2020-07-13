@@ -146,16 +146,16 @@
             console.log(num % 2);
             if (num % 2 == 1) {
                 AddConsole("[" + num + "]的二进制数据为：" + thisSSD.FindPage(num).content,
-                    "[" + num + "]的解码数据为：" + Data.BinaryToStr(thisSSD.FindPage(num).content));
+                    "[" + num + "]的解码数据为：" + Data.BinaryToStr(thisSSD.FindPage(num).Read()));
 
             } else {
                 AddConsole("[" + num + "]的二进制数据为：" + thisSSD.FindPage(num).content,
-                    "[" + num + "]指向的page是：" + SSD.BinaryToPageId(thisSSD.FindPage(num).content));
+                    "[" + num + "]指向的page是：" + SSD.BinaryToPageId(thisSSD.FindPage(num).Read()));
 
             }
         } else {
             AddConsole("[" + num + "]的二进制数据为：" + thisSSD.FindPage(num).content,
-                "[" + num + "]的解码数据为：" + Data.BinaryToStr(thisSSD.FindPage(num).content));
+                "[" + num + "]的解码数据为：" + Data.BinaryToStr(thisSSD.FindPage(num).Read()));
 
         }
     }

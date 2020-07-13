@@ -5,8 +5,14 @@ class Block {
 
     //Block存储所用的Page
     pages;
+
+    // Block的编号
     num;
+
+    // Block所在的SSD
     ssd;
+
+    // 使用此Block的Data
     data;
 
     constructor(content, num = 0, data = undefined) {
@@ -54,7 +60,7 @@ class Block {
                 contentStr.substring(
                     i * Page.PAGE_SIZE,
                     i * Page.PAGE_SIZE + Page.PAGE_SIZE
-                ) != pages[i].content
+                ) != pages[i].Read()
             ) {
                 difference.push(i);
             }
@@ -99,7 +105,7 @@ class Block {
 
         let str = "";
         this.pages.forEach((element) => {
-            str += element.content;
+            str += element.Read();
         });
         // 剔除block开头的占位数据
         while (str.length >= Data.CHAR_SIZE) {
@@ -151,7 +157,7 @@ class Block {
     CollectPages() {
         let tmpContent = "";
         this.pages.forEach((element) => {
-            tmpContent += element.content;
+            tmpContent += element.Read();
         });
         return tmpContent;
     }

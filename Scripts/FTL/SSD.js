@@ -185,7 +185,7 @@ class SSD {
         for (let block in this.dataLog) {
             for (let i = 0; i < this.dataLog[block].pages.length; i += 2) {
                 if (
-                    SSD.BinaryToPageId(this.dataLog[block].pages[i].content) == "0000"
+                    SSD.BinaryToPageId(this.dataLog[block].pages[i].Read()) == "0000"
                 ) {
                     this.dataLog[block].pages[i].Write(SSD.PageIdToBinary(oldPage.num));
                     this.dataLog[block].pages[i + 1].Write(content);
@@ -202,9 +202,9 @@ class SSD {
         let result;
         for (let block in this.dataLog) {
             for (let i = 0; i < this.dataLog[block].pages.length; i += 2) {
-                if (this.dataLog[block].pages[i].content == SSD.PageIdToBinary(num)) {
+                if (this.dataLog[block].pages[i].Read() == SSD.PageIdToBinary(num)) {
                     result = this.dataLog[block].pages[i + 1];
-                } else if (parseInt(this.dataLog[block].pages[i].content, 2) === 0) {
+                } else if (parseInt(this.dataLog[block].pages[i].Read(), 2) === 0) {
                     return result;
                 }
             }

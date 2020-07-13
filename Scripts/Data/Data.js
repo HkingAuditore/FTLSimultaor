@@ -12,9 +12,13 @@ function DefaultDataName() {
     return dataNameGenerator.next().value;
 }
 class Data {
+    // Unicode字符长度
     static CHAR_SIZE = 16;
+    // Data使用的Block
     blocks;
+    // Data存储于的SSD
     ssd;
+    // Data的名称
     name;
 
     constructor(content, name = DefaultDataName(), ssd = undefined) {
@@ -69,8 +73,8 @@ class Data {
         // console.log(pages);
         let content = "";
         pages.forEach((element) => {
-            if (parseInt(element.content, 2) != 0) {
-                content += element.content;
+            if (parseInt(element.Read(), 2) != 0) {
+                content += element.Read();
             }
         });
 

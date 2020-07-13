@@ -147,7 +147,8 @@
 
     function ShowBlockData(num) {
         if (num === undefined) num = "0000";
-        AddConsole("[" + num + "]的二进制数据为：" + thisSSD.FindBlock(num).Read(),
+        let contentStr = thisSSD.FindBlock(num).Read()
+        AddConsole("[" + num + "]的二进制数据为：" + (contentStr === undefined ? "全0空数据" : contentStr),
             "[" + num + "]的解码数据为：" + Data.BinaryToStr(thisSSD.FindBlock(num).Read()));
     }
 
@@ -171,7 +172,7 @@
             data = dataList.get(String($("#DataEditName").val()));
             data.EditHybrid(String($("#DataEdit").val()));
             ShowSSD(thisSSD);
-            AddConsole("[" + data.name + "]:{" + data.ReadIncludeLog() + "}");
+            AddConsole("[" + data.name + "] 已修改为 {" + data.ReadIncludeLog() + "}");
 
         } catch (e) {
             ShowAlert(e.message);
@@ -209,6 +210,7 @@
     function Merge() {
         thisSSD.FullMerge();
         ShowSSD(thisSSD);
+        ShowAlert("已进行DataLog合并!");
     }
 </script>
 

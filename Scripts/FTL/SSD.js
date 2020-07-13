@@ -111,7 +111,7 @@ class SSD {
                 savedBls.push(this.WriteBlock(data.blocks[i]));
             } catch (e) {
                 console.log(e.message);
-                break;
+                throw e;
             }
         }
         data.ssd = this;

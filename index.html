@@ -124,6 +124,17 @@
         }
     }
 
+    function DeleteData() {
+        try {
+            let name = $("#DataDeleteName").val();
+            thisSSD.DeleteData(dataList.get(name));
+            dataList.delete(name);
+            ShowSSD(thisSSD);
+        } catch {
+            ShowAlert("找不到数据！");
+        }
+    }
+
     function ShowPageData(num) {
         if (num === undefined) num = "0000";
         if (thisSSD.dataLog.some(element =>
@@ -289,6 +300,17 @@
                         </div>
                     </div>
                 </div>
+
+                <div class="row">
+                    <div class="input-group mb-3">
+                        <input type="text" class="form-control" placeholder="删除数据名" aria-label="删除数据名" aria-describedby="button-addon2" id="DataDeleteName">
+                        <div class="input-group-append">
+                            <button class="btn btn-outline-secondary" type="button" onclick="DeleteData()" disabled>删除数据</button>
+                        </div>
+                    </div>
+                </div>
+
+
 
 
                 <div class="row">

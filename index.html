@@ -28,99 +28,258 @@
     <script type="text/javascript" src="Scripts/Data/Data.js"></script>
     <script type="text/javascript" src="Scripts/FTL/SSD.js"></script>
 </head>
+<style>
+    .log {}
+    
+    .used {}
+    
+    .free {}
+    
+    .page {}
+    
+    .block {}
+</style>
 <script>
-    var ssd = new SSD(256);
-    var data = new Data("日月之行，若出其中。", "观沧海");
-    ssd.WriteData(data);
-    console.log(data.Read());
-    console.log(data.ReadIncludeLog());
+    var thisSSD;
+    var pagesDraw = new Map();
+    var blocksDraw = new Map();
+    var dataList = new Map();
+
+    function Allocate() {
+        thisSSD = new SSD(Number($("#SsdSize").val()), DefaultSSDName(), Number($("#DataLogSize").val()));
+        pagesDraw = new Map();
+        blocksDraw = new Map();
+        dataList = new Map();
+        console.log("SSD已创建！");
+        console.log(thisSSD);
+
+        ShowSSD(thisSSD);
+
+    }
+
+    function ShowSSD(s) {
+        $("#BlocksArea").empty();
+
+        s.blocksTable.forEach((value, key) => {
+            let blockDiv = $("<div class='row-cols-6 ' id='B" + key + "' blockNum='" + key + "'></div>");
+            let blockButtonDiv = $("<button type='button' style='margin:0.5%' class='btn btn-outline-primary block' id='BB" + key + "' blockNum='" + key + "' Onclick='ShowBlockData(" + key.replace(/\b(0+)/gi, "") + ")' ></button>").text(key);
+            $("#BlocksArea").append(blockDiv);
+            blockDiv.append(blockButtonDiv);
+            value.pages.forEach((element) => {
+                let pageDiv = $("<button type='button' style='margin:0.5%' class='btn btn-secondary page' id='P" + element.num + "' pageNum='" + element.num + "' Onclick='ShowPageData(" + element.num.replace(/\b(0+)/gi, "") + ")' ></button>").text(element.num);
+                $("#B" + key).append(pageDiv);
+                pagesDraw.set(element.num, pageDiv);
+            })
+
+            if (s.dataLog.some((x =>
+                    x.num == key
+                ))) {
+                $("#B" + key + ">button[pageNum]").toggleClass("btn-secondary btn-warning");
+                $("#B" + key + ">button[blockNum]").toggleClass("btn-outline-primary block btn-outline-warning");
+
+            } else if (s.freeBlocks.some(x =>
+                    x.num == key
+                )) {
+                $("#B" + key + ">button[pageNum]").toggleClass("btn-secondary btn-success");
+                $("#B" + key + ">button[blockNum]").toggleClass("btn-outline-primary block btn-outline-success");
+
+            } else {
+                $("#B" + key + ">button[pageNum]").toggleClass("btn-secondary btn-danger");
+                $("#B" + key + ">button[blockNum]").toggleClass("btn-outline-primary block btn-outline-danger");
+
+            }
+
+            blocksDraw.set(key, blockDiv);
 
 
-    data.Edit("对酒当歌，人生几何！");
-    console.log("修改为：对酒当歌，人生几何！");
-    console.log(data.Read());
-    console.log(data.ReadIncludeLog());
-    // ssd.FullMerge();
-    console.log("");
+        });
+    }
 
+    function ShowPageContent(num) {
 
-    data.Edit("呦呦鹿鸣，食野之苹。");
-    console.log("修改为：呦呦鹿鸣，食野之苹。");
-    console.log(data.Read());
-    console.log(data.ReadIncludeLog());
-    // ssd.FullMerge();
+    }
 
-    // console.log("完全合并：");
-    // console.log(data.Read());
-    // console.log(data.ReadIncludeLog());
-    console.log("");
+    function WriteData() {
+        try {
+            if (dataList.has(String($("#DataWriteName").val()))) {
+                ShowAlert("已有同名数据，请更换名称或删除旧数据。");
+            } else {
+                var data = new Data(String($("#DataWrite").val()), String($("#DataWriteName").val()), thisSSD);
+                dataList.set(data.name, data);
+                console.log(data);
+                ShowSSD(thisSSD);
+                AddConsole("[" + String($("#DataWriteName").val()) + "]:{" + String($("#DataWrite").val()) + "} 已写入！");
+            }
 
-    data.Edit("月明星稀，乌鹊南飞。绕树三匝，何枝可依？山不厌高，海不厌深。周公吐哺，天下归心。");
-    // console.log("修改为：月明星稀，乌鹊南飞。绕树三匝，何枝可依？山不厌高，海不厌深。周公吐哺，天下归心。");
-    // console.log(data.Read());
-    // console.log(data.ReadIncludeLog());
-    // ssd.FullMerge();
-
-    var data1 = new Data("日月之行，若出其中。星汉灿烂，若出其里。", "观沧海");
-    ssd.WriteData(data1);
-
-    console.log("展示数据热度：");
-    data.blocks.forEach(x => {
-        console.log("BLOOM WRITE: " + ssd.BloomHashA(x.num) + "," + ssd.BloomHashB(x.num) + "," + ssd.BloomHashC(x.num))
-        console.log(x.num + " : " + ssd.BloomFilterGetter(x.num));
-    })
-    console.log("展示数据热度：");
-    data1.blocks.forEach(x => {
-            console.log("BLOOM WRITE: " + ssd.BloomHashA(x.num) + "," + ssd.BloomHashB(x.num) + "," + ssd.BloomHashC(x.num))
-            console.log(x.num + " : " + ssd.BloomFilterGetter(x.num));
-        })
-        // console.log(data.ReadIncludeLog());
-
-
-    console.log("展示数据热度：");
-    ssd.blocksTable.forEach(function(value, key) {
-        if (value.Read() !== undefined) {
-            console.log(value.Read());
-            console.log(key + " : " + ssd.BloomFilterGetter(key));
-        } else {
-            console.log("EMPTY");
-
-            console.log(key + " : " + ssd.BloomFilterGetter(key));
-
+        } catch (e) {
+            ShowAlert(e.message);
         }
+    }
 
-    })
+    function ShowPageData(num) {
+        if (num === undefined) num = "0000";
+        AddConsole("[" + num + "]的二进制数据为：" + thisSSD.FindPage(num).content,
+            "[" + num + "]的解码数据为：" + Data.BinaryToStr(thisSSD.FindPage(num).content));
+    }
 
-    // var indicator = new Array(ssd.coldHotIndicator.length).fill(0);
-    // ssd.blocksTable.forEach((x) => {
-    //     indicator[ssd.BloomHashA(x.num)]++;
-    //     indicator[ssd.BloomHashB(x.num)]++;
-    //     indicator[ssd.BloomHashC(x.num)]++;
-    // })
+    function ShowBlockData(num) {
+        AddConsole("[" + num + "]的二进制数据为：" + thisSSD.FindBlock(num).Read(),
+            "[" + num + "]的解码数据为：" + Data.BinaryToStr(thisSSD.FindBlock(num).Read()));
+    }
 
-    // console.log("分布");
-    // for (let i in indicator) {
-    //     console.log("[" + i + "]" + indicator[i]);
+    function AddConsole(...theTexts) {
+        $("#ConsoleText").append("*****************************" + "\n");
+        theTexts.forEach(x => {
+            $("#ConsoleText").append(x + "\n");
+        })
+        $("#ConsoleText").scrollTop($("#ConsoleText")[0].scrollHeight);
+        $("#ConsoleText").append("*****************************" + "\n");
 
-    // }
+    }
 
+    function ReadData() {
+        let data = dataList.get(String($("#DataReadName").val()));
+        AddConsole("查看数据", "[" + data.name + "]:{" + data.ReadIncludeLog() + "}");
+    }
 
+    function EditData() {
+        try {
+            data = dataList.get(String($("#DataEditName").val()));
+            data.EditHybrid(String($("#DataEdit").val()));
+            ShowSSD(thisSSD);
+            AddConsole("[" + data.name + "]:{" + data.ReadIncludeLog() + "}");
 
+        } catch (e) {
+            ShowAlert(e.message);
+        }
+    }
 
-
-    // data.EditHybrid("东临碣石，以观沧海。水何澹澹，山岛竦峙。树木丛生，百草丰茂。秋风萧瑟，洪波涌起。日月之行，若出其中。星汉灿烂，若出其里。幸甚至哉，歌以咏志。");
-
-
-    // console.log(data.ReadIncludeLog());
-
-
-    // console.log(ssd);
-    // console.log(data);
-    // ssd.FullMerge();
-    // console.log(data.ReadIncludeLog());
-    // console.log(data.Read());
+    function ShowAlert(str) {
+        $('.modal-body').html(str);
+        $('#SSDAlert').modal('show');
+    }
 </script>
 
-<body></body>
+<body>
+
+    <div class=" container-fluid" style="margin-top: 5%;padding-left: 10%;padding-right: 10%;">
+        <div class=" row">
+            <div class="col-12" style="padding-right: 70%;">
+
+
+                <div class="input-group mb-3">
+                    <div class="input-group-prepend">
+                        <label class="input-group-text" for="inputGroupSelect01">固态硬盘的容量</label>
+                    </div>
+                    <select class="custom-select" id="SsdSize">
+                          <option value="8" selected>1 KB</option>
+                          <option value="16">2 KB</option>
+                          <option value="32">3 KB</option>
+                          <option value="64">4 KB</option>
+                        </select>
+                    <select class="custom-select" id="DataLogSize">
+                          <option value="2" selected>256 Bit</option>
+                          <option value="4" >512 Bit</option>
+                        </select>
+                    <div class="input-group-append">
+                        <button class="btn btn-outline-secondary" type="button" id="button-addon1" onclick="Allocate()">分配</button>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+        <div class="row" id="DrawArea">
+            <div class="col-6" id="BlocksArea">
+
+            </div>
+            <div class="col-6" id="ConsoleArea">
+                <div class="row">
+                    <div class="input-group mb-3">
+                        <input type="text" class="form-control" placeholder="写入数据名称" aria-label="写入数据名称" aria-describedby="button-addon2" id="DataWriteName">
+                        <input type="text" class="form-control" placeholder="写入内容" aria-label="写入内容" aria-describedby="button-addon2" id="DataWrite">
+                        <div class="input-group-append">
+                            <button class="btn btn-outline-secondary" type="button" onclick="WriteData()">写入数据</button>
+                        </div>
+                    </div>
+                </div>
+
+
+                <div class="row">
+                    <div class="input-group mb-3">
+                        <input type="text" class="form-control" placeholder="读取数据名" aria-label="读取数据名" aria-describedby="button-addon2" id="DataReadName">
+                        <div class="input-group-append">
+                            <button class="btn btn-outline-secondary" type="button" onclick="ReadData()">读取数据</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="input-group mb-3">
+                        <input type="text" class="form-control" placeholder="修改数据名" aria-label="修改数据名" aria-describedby="button-addon2" id="DataEditName">
+                        <input type="text" class="form-control" placeholder="修改数据内容" aria-label="修改数据内容" aria-describedby="button-addon2" id="DataEdit">
+                        <div class="input-group-append">
+                            <button class="btn btn-outline-secondary" type="button" onclick="EditData()">修改数据</button>
+                        </div>
+                    </div>
+                </div>
+
+
+                <div class="row">
+                    <div class="input-group">
+                        <textarea class="form-control" aria-label="With textarea" style="height: 300px;" id="ConsoleText"></textarea>
+                    </div>
+                </div>
+            </div>
+
+
+        </div>
+
+        <div class="row">
+            <div class="alert alert-primary" role="alert" style="margin-left: 1%;">
+                左侧空心按钮表示Block，其同行右侧实心按钮表示这一Block包含的Page
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="alert alert-warning" style="margin-left: 1%;" role="alert">
+                黄色表示Data-log部分
+            </div>
+        </div>
+
+        <div class="row">
+
+            <div class="alert alert-success" style="margin-left: 1%;" role="alert">
+                绿色表示可写部分
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="alert alert-danger" style="margin-left: 1%;" role="alert">
+                红色表示被使用部分
+            </div>
+        </div>
+    </div>
+
+
+    <div class="modal fade" id="SSDAlert" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalCenterTitle">提示</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button>
+                </div>
+                <div class="modal-body">
+                    ...
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary" onclick="$('#SSDAlert').modal('hide')">好的</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
 
 </html>

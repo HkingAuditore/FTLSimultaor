@@ -1,12 +1,23 @@
 /// <reference path="Block.js" />
 /// <reference path="../FTL/SSD.js" />
+/* #region  自动生成数据名 */
+//盘符生成器
+function* DataNameGenerator() {
+    let index = 0;
+    while (true) yield String.fromCharCode("A".charCodeAt() + index++);
+}
+var dataNameGenerator = DataNameGenerator();
+
+function DefaultDataName() {
+    return dataNameGenerator.next().value;
+}
 class Data {
     static CHAR_SIZE = 16;
     blocks;
     ssd;
     name;
 
-    constructor(content, name = "untitled", ssd = undefined) {
+    constructor(content, name = DefaultDataName(), ssd = undefined) {
         let bls = [];
         // 将存储内容二进制化
         let contentStr = Data.StrToBinary(content);

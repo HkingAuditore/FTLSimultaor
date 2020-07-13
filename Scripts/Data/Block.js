@@ -7,10 +7,12 @@ class Block {
     pages;
     num;
     ssd;
+    data;
 
-    constructor(content, num = 0) {
+    constructor(content, num = 0, data = undefined) {
         this.FillPages(content);
         this.num = num;
+        this.data = data;
     }
 
     FillPages(content) {
@@ -46,27 +48,8 @@ class Block {
     static CompareInPages(content, pages) {
         let contentStr = String(content);
         let difference = [];
-        // console.log("COUNT   :" + Block.BUFFER_SIZE / Page.PAGE_SIZE);
 
         for (let i = 0; i < Block.BUFFER_SIZE / Page.PAGE_SIZE; i++) {
-            // console.log(
-            //     "EDIT    :" +
-            //     Data.BinaryToStr(
-            //         contentStr.substring(
-            //             i * Page.PAGE_SIZE,
-            //             i * Page.PAGE_SIZE + Page.PAGE_SIZE
-            //         )
-            //     ) +
-            //     "ORI  [" +
-            //     i +
-            //     "]:" +
-            //     Data.BinaryToStr(this.pages[i].content) +
-            //     "RESULT:" + (contentStr.substring(
-            //         i * Page.PAGE_SIZE,
-            //         i * Page.PAGE_SIZE + Page.PAGE_SIZE
-            //     ) !== this.pages[i].content)
-            // );
-
             if (
                 contentStr.substring(
                     i * Page.PAGE_SIZE,
@@ -91,6 +74,7 @@ class Block {
         return existed;
     }
 
+    // 读取块中当前包含Log的最新结果
     ReadBlockPagesWithLog() {
         let edit = this.FindExistedEdit();
         let pages = this.pages;
@@ -101,6 +85,34 @@ class Block {
         }
 
         return pages;
+    }
+
+    // 读取块中当前包含Log的最新结果(Content)
+    ReadBlockPagesWithLogContent() {
+        let edit = this.FindExistedEdit();
+        let pages = this.pages;
+        for (let i = 0; i < pages.length; i++) {
+            if (edit.get(pages[i].num) !== undefined) {
+                pages[i] = edit.get(pages[i].num);
+            }
+        }
+
+        let str = "";
+        this.pages.forEach((element) => {
+            str += element.content;
+        });
+        // 剔除block开头的占位数据
+        while (str.length >= Data.CHAR_SIZE) {
+            let tmp = parseInt(str.substring(0, Data.CHAR_SIZE), 2);
+            if (tmp == 0) {
+                str = str.substring(Data.CHAR_SIZE);
+                continue;
+            } else {
+                return str;
+            }
+        }
+
+        return str;
     }
 
     // 清空块
@@ -144,11 +156,15 @@ class Block {
         return tmpContent;
     }
 
+    //
+
+
     // 区块数据复制
     static Clone(origin, target) {
         origin.pages.forEach((element, index) => {
             Page.Clone(element, target.pages[index]);
         });
+        target.data = origin.data;
         return target;
     }
 }

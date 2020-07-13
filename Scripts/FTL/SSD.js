@@ -134,6 +134,7 @@ class SSD {
         if (target != -1) {
             // 注释下行表明Free操作不对Block进行擦除
             // this.usedBlocks[target].Clean();
+            this.usedBlocks[target].data = undefined;
             this.freeBlocks.push(this.usedBlocks[target]);
             this.usedBlocks.splice(target, 1);
         } else {
@@ -176,11 +177,12 @@ class SSD {
     UpdateLog(content, oldPage) {
         for (let block in this.dataLog) {
             for (let i = 0; i < this.dataLog[block].pages.length; i += 2) {
-                if (SSD.BinaryToPageId(this.dataLog[block].pages[i].content) == "0000") {
+                if (
+                    SSD.BinaryToPageId(this.dataLog[block].pages[i].content) == "0000"
+                ) {
                     this.dataLog[block].pages[i].Write(SSD.PageIdToBinary(oldPage.num));
                     this.dataLog[block].pages[i + 1].Write(content);
                     this.dataLogCur = block;
-                    // console.log("EDIT:" + Data.BinaryToStr(content) + " AT " + this.dataLog[block].pages[i].num);
                     return i;
                 }
             }
@@ -193,21 +195,65 @@ class SSD {
         let result;
         for (let block in this.dataLog) {
             for (let i = 0; i < this.dataLog[block].pages.length; i += 2) {
-                // console.log("[" + SSD.BinaryToPageId(this.dataLog[block].pages[i].content) + "]<=>[" + SSD.BinaryToPageId(SSD.PageIdToBinary(num)) + "]")
                 if (this.dataLog[block].pages[i].content == SSD.PageIdToBinary(num)) {
-                    // if (result !== undefined)
-                    // console.log("LAST          :" + Data.BinaryToStr(result.content));
                     result = this.dataLog[block].pages[i + 1];
-                    // console.log("DIFFERANCE:" + Data.BinaryToStr(result.content));
                 } else if (parseInt(this.dataLog[block].pages[i].content, 2) === 0) {
-                    // if (result !== undefined)
-                    // console.log("0 - DIFFERANCE:" + Data.BinaryToStr(result.content));
                     return result;
                 }
             }
         }
         return result;
     }
+
+    /* #region  垃圾回收 */
+    FreeLog() {
+        this.dataLog.forEach(element => {
+            element.pages.forEach(page => {
+                page.Write("".padStart(Page.PAGE_SIZE, "0"));
+            })
+        });
+        this.dataLogCur = 0;
+    }
+
+    // 完全合并
+    FullMerge() {
+        let usedBlks = [];
+        // 创建usedblock的副本，不能使用引用！
+        this.usedBlocks.forEach(element => {
+            usedBlks.push(element);
+        })
+
+        //逐usedblock操作
+        for (let i = 0; i < usedBlks.length; i++) {
+            let existed = usedBlks[i].FindExistedEdit();
+            // 如果这个block有对应的修改log，就新申请一个block进行合并操作
+            if (existed.size > 0) {
+                let tmp = new Block("");
+                let pages = usedBlks[i].ReadBlockPagesWithLog();
+
+                // 数据转移
+                for (let page in pages) {
+                    Page.Clone(pages[page], tmp.pages[page]);
+                }
+                let blk = this.WriteBlock(tmp);
+                usedBlks[i].data.ChangeBlock(usedBlks[i], blk);
+
+                // 旧block释放
+                this.Free(usedBlks[i]);
+
+            }
+        }
+        this.FreeLog();
+    }
+
+    // 部分合并
+    PartialMerge() {
+
+    }
+
+
+
+    /* #endregion */
 
     /* #region   地址映射*/
     // 根据data名称查找data

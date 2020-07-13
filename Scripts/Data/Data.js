@@ -17,6 +17,10 @@ class Data {
         }
 
         this.blocks = bls;
+        for (let blk of this.blocks) {
+            blk.data = this;
+        }
+
         this.name = name;
 
         if (ssd !== undefined) {
@@ -46,10 +50,8 @@ class Data {
 
         for (let p in pages) {
             let result = this.ssd.DataLogFind(pages[p].num);
-            // console.log(result);
 
             if (result !== undefined) {
-                // console.log("Find diffrence :" + result.content);
                 pages[p] = result;
             }
         }
@@ -58,7 +60,6 @@ class Data {
         pages.forEach((element) => {
             if (parseInt(element.content, 2) != 0) {
                 content += element.content;
-                // console.log(Data.BinaryToStr((element.content)));
             }
         });
 
@@ -82,7 +83,7 @@ class Data {
             } else {
                 try {
                     // 修改内容在原有Blocks范围外
-                    this.blocks.push(this.ssd.WriteBlock(new Block(tmpContent)));
+                    this.blocks.push(this.ssd.WriteBlock(new Block(tmpContent, 0, this)));
                 } catch (e) {
                     console.log(e.message);
                     break;
@@ -108,8 +109,6 @@ class Data {
         while (contentStr.length > 0) {
             let tmpContent = contentStr.substring(0, Block.BUFFER_SIZE);
             tmpContent = tmpContent.padStart(Block.BUFFER_SIZE, "0");
-            // console.log("TMP  :" + tmpContent);
-            // console.log("BLOCK:" + this.blocks[i].Read());
 
             if (i < this.blocks.length) {
                 // 修改内容在原有Blocks范围内
@@ -124,16 +123,6 @@ class Data {
                             target * Page.PAGE_SIZE,
                             target * Page.PAGE_SIZE + Page.PAGE_SIZE
                         );
-                        // console.log(
-                        //     "INDEX:" +
-                        //     i +
-                        //     " TARGET:" +
-                        //     target +
-                        //     " EDIT:" +
-                        //     Data.BinaryToStr(editContent) +
-                        //     " IN:" +
-                        //     Data.BinaryToStr(this.blocks[i].pages[target].content)
-                        // );
 
                         this.ssd.UpdateLog(editContent, this.blocks[i].pages[target]);
                     }
@@ -141,7 +130,7 @@ class Data {
             } else {
                 try {
                     // 修改内容在原有Blocks范围外
-                    this.blocks.push(this.ssd.WriteBlock(new Block(tmpContent)));
+                    this.blocks.push(this.ssd.WriteBlock(new Block(tmpContent, 0, this)));
                 } catch (e) {
                     console.log(e.message);
                     break;
@@ -174,6 +163,12 @@ class Data {
         for (let blk of originBlocks) {
             originSSD.Free(blk);
         }
+    }
+
+    ChangeBlock(origin, target) {
+        let index = this.blocks.indexOf(origin);
+        target.data = this;
+        this.blocks[index] = target;
     }
 
     //复制数据到另一个SSD

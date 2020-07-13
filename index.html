@@ -59,6 +59,7 @@
         console.log(thisSSD);
 
         ShowSSD(thisSSD);
+        $("button").removeAttr("disabled");
 
 
     }
@@ -260,7 +261,7 @@
                         <input type="text" class="form-control" placeholder="写入数据名称" aria-label="写入数据名称" aria-describedby="button-addon2" id="DataWriteName">
                         <input type="text" class="form-control" placeholder="写入内容" aria-label="写入内容" aria-describedby="button-addon2" id="DataWrite">
                         <div class="input-group-append">
-                            <button class="btn btn-outline-secondary" type="button" onclick="WriteData()">写入数据</button>
+                            <button class="btn btn-outline-secondary" type="button" onclick="WriteData()" disabled>写入数据</button>
                         </div>
                     </div>
                 </div>
@@ -270,7 +271,7 @@
                     <div class="input-group mb-3">
                         <input type="text" class="form-control" placeholder="读取数据名" aria-label="读取数据名" aria-describedby="button-addon2" id="DataReadName">
                         <div class="input-group-append">
-                            <button class="btn btn-outline-secondary" type="button" onclick="ReadData()">读取数据</button>
+                            <button class="btn btn-outline-secondary" type="button" onclick="ReadData()" disabled>读取数据</button>
                         </div>
                     </div>
                 </div>
@@ -280,7 +281,7 @@
                         <input type="text" class="form-control" placeholder="修改数据名" aria-label="修改数据名" aria-describedby="button-addon2" id="DataEditName">
                         <input type="text" class="form-control" placeholder="修改数据内容" aria-label="修改数据内容" aria-describedby="button-addon2" id="DataEdit">
                         <div class="input-group-append">
-                            <button class="btn btn-outline-secondary" type="button" onclick="EditData()">修改数据</button>
+                            <button class="btn btn-outline-secondary" type="button" onclick="EditData()" disabled>修改数据</button>
                         </div>
                     </div>
                 </div>
@@ -294,9 +295,9 @@
 
                 <div class="row">
 
-                    <button type="button" class="btn btn-primary" style="margin-top: 2%;" onclick="SwitchBloom()">查看数据热度</button>
+                    <button type="button" class="btn btn-primary" style="margin-top: 2%;" onclick="SwitchBloom()" disabled>查看数据热度</button>
 
-                    <button type="button" class="btn btn-primary" style="margin-top: 2%;margin-left: 2%;" onclick="Merge()">合并DataLog</button>
+                    <button type="button" class="btn btn-primary" style="margin-top: 2%;margin-left: 2%;" onclick="Merge()" disabled>合并DataLog</button>
 
                 </div>
 

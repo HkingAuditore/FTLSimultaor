@@ -174,6 +174,7 @@ class Data {
         });
         newLogs.forEach((e) => {
             this.ssd.FreeSingleLog(e);
+
         });
         throw e;
     }

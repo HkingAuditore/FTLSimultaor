@@ -38,6 +38,10 @@
     .page {}
     
     .block {}
+
+    .used{
+        filter: brightness(0.8);
+    }
 </style>
 <script>
     var thisSSD;
@@ -76,6 +80,14 @@
                 let pageDiv = $("<button type='button' style='margin:0.5%' class='btn btn-secondary page' id='P" + element.num + "' pageNum='" + element.num + "' Onclick='ShowPageData(" + element.num.replace(/\b(0+)/gi, "") + ")' ></button>").text(element.num);
                 $("#B" + key).append(pageDiv);
                 pagesDraw.set(element.num, pageDiv);
+                let actualNum = element.num.replace(/\b(0+)/gi, "");
+                if( actualNum === "") actualNum="0";
+                // console.log(parseInt(element.Read()));
+                // console.log(actualNum);
+                // console.log(thisSSD.dataLog.length * Block.BUFFER_SIZE/ Page.PAGE_SIZE);
+                if(parseInt(element.Read()) !== 0 && parseInt(actualNum) <= (thisSSD.dataLog.length * Block.BUFFER_SIZE / Page.PAGE_SIZE) ){
+                    pageDiv.toggleClass("used");
+                }
             })
 
             if (s.dataLog.some((x =>
@@ -83,7 +95,7 @@
                 ))) {
                 $("#B" + key + ">button[pageNum]").toggleClass("btn-secondary btn-warning");
                 $("#B" + key + ">button[blockNum]").toggleClass("btn-outline-primary block btn-outline-warning");
-
+                
             } else if (s.freeBlocks.some(x =>
                     x.num == key
                 )) {
@@ -138,6 +150,10 @@
 
     function ShowPageData(num) {
         if (num === undefined) num = "0000";
+        // console.log(parseInt(thisSSD.FindPage(num).Read()));
+        // console.log(parseInt(num.replace(/\b(0+)/gi, "")));
+        // console.log(thisSSD.dataLog.length * Block.BUFFER_SIZE/ Page.PAGE_SIZE);
+
         if (thisSSD.dataLog.some(element =>
                 element.pages.some(e =>
                     e.num == num
@@ -145,16 +161,16 @@
             )) {
             console.log(num % 2);
             if (num % 2 == 1) {
-                AddConsole("[" + num + "]的二进制数据为：" + thisSSD.FindPage(num).content,
+                AddConsole("[" + num + "]的二进制数据为：" + thisSSD.FindPage(num).Read(),
                     "[" + num + "]的解码数据为：" + Data.BinaryToStr(thisSSD.FindPage(num).Read()));
 
             } else {
-                AddConsole("[" + num + "]的二进制数据为：" + thisSSD.FindPage(num).content,
+                AddConsole("[" + num + "]的二进制数据为：" + thisSSD.FindPage(num).Read(),
                     "[" + num + "]指向的page是：" + SSD.BinaryToPageId(thisSSD.FindPage(num).Read()));
 
             }
         } else {
-            AddConsole("[" + num + "]的二进制数据为：" + thisSSD.FindPage(num).content,
+            AddConsole("[" + num + "]的二进制数据为：" + thisSSD.FindPage(num).Read(),
                 "[" + num + "]的解码数据为：" + Data.BinaryToStr(thisSSD.FindPage(num).Read()));
 
         }

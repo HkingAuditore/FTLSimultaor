@@ -116,6 +116,7 @@ class Data {
         }
     }
 
+    // 有缓冲区的修改
     EditHybrid(content) {
         // 将存储内容二进制化
         let contentStr = Data.StrToBinary(content);

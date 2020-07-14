@@ -16,12 +16,13 @@ class Block {
     data;
 
     constructor(content, num = 0, data = undefined) {
-        this.FillPages(content);
+        this.Write(content);
         this.num = num;
         this.data = data;
     }
 
-    FillPages(content) {
+    // Block写入
+    Write(content) {
         let contentStr = String(content);
 
         // 将区块的BUFFER_SIZE空间填满
@@ -42,7 +43,7 @@ class Block {
 
     // 修改Block内容
     Edit(content) {
-        this.FillPages(content);
+        this.Write(content);
     }
 
     // 比较内容
@@ -60,7 +61,7 @@ class Block {
                 contentStr.substring(
                     i * Page.PAGE_SIZE,
                     i * Page.PAGE_SIZE + Page.PAGE_SIZE
-                ) != pages[i].Read()
+                ) !== pages[i].Read()
             ) {
                 difference.push(i);
             }

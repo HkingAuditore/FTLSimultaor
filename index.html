@@ -85,7 +85,7 @@
                 // console.log(parseInt(element.Read()));
                 // console.log(actualNum);
                 // console.log(thisSSD.dataLog.length * Block.BUFFER_SIZE/ Page.PAGE_SIZE);
-                if(parseInt(element.Read()) !== 0 && parseInt(actualNum) <= (thisSSD.dataLog.length * Block.BUFFER_SIZE / Page.PAGE_SIZE) ){
+                if(parseInt(element.Read()) !== 0 && parseInt(actualNum) < (thisSSD.dataLog.length * Block.BUFFER_SIZE / Page.PAGE_SIZE) ){
                     pageDiv.toggleClass("used");
                 }
             })

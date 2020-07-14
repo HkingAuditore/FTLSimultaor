@@ -1,7 +1,7 @@
 /// <reference path="Block.js" />
 /// <reference path="../FTL/SSD.js" />
 /* #region  自动生成数据名 */
-//盘符生成器
+//文件名生成器
 function* DataNameGenerator() {
     let index = 0;
     while (true) yield String.fromCharCode("A".charCodeAt() + index++);

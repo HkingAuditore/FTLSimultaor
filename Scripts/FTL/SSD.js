@@ -120,6 +120,7 @@ class SSD {
         return origin;
     }
 
+    // 删除数据
     DeleteData(data) {
         if (data.ssd != this) throw new Error("这个Data不在此SSD！");
         for (let block of data.blocks) {

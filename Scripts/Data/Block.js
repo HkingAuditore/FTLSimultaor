@@ -84,7 +84,11 @@ class Block {
     // 读取块中当前包含Log的最新结果
     ReadBlockPagesWithLog() {
         let edit = this.FindExistedEdit();
-        let pages = this.pages;
+        
+        let pages = [];
+        this.pages.forEach((pg) => {
+            pages.push(pg);
+        })
         for (let i = 0; i < pages.length; i++) {
             if (edit.get(pages[i].num) !== undefined) {
                 pages[i] = edit.get(pages[i].num);
